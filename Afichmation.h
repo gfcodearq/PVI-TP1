@@ -36,8 +36,7 @@ private:
 	/**
 	* @brief Propiedad para contener la textura del spritesheet
 	*/
-	Texture *texture;
-	
+	Texture *texture;	
 	/**
 	* @brief Propiedad reloj para actualización del spritesheet (control de FPS)
 	*/
@@ -199,7 +198,7 @@ public:
 	* @param Retorna la escala del sprite en formato Vector2f
 	*/
 	const Vector2f &getScale();
-	void Draw();	
+	void Draw(RenderWindow *wnd);	
 };
 #endif
 

@@ -4,7 +4,7 @@ Afichmation::Afichmation(string path, bool loop, int width, int height){
 	texture = new Texture();
 	this->width = width;
 	this->height = height;
-	texture->loadFromFile(path);
+	texture->loadFromFile(path);		
 	isLooping = loop;
 	setTexture(*texture);
 	Setup();
@@ -109,4 +109,8 @@ void Afichmation::Update() {
 			clock.restart();
 		}
 	}
+}
+void Afichmation::Draw(RenderWindow* wnd)
+{
+	wnd->draw();
 }

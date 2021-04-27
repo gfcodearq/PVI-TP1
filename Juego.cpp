@@ -84,7 +84,7 @@ void Juego::dibujar()
 {
 	anim->Update();
 	wnd->clear(Color(255,255,255,255));	
-	anim->Draw();
+	anim->Draw(wnd);
 	wnd->display();
 }
 
