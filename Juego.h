@@ -20,7 +20,7 @@ public:
 private:
 	RenderWindow* wnd;
 	Event* evento;
-	Afichmation* anim;
+	Afichmation* anim;	
 };
 
 #endif
