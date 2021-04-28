@@ -13,9 +13,10 @@ Juego::Juego(Vector2i resol, string tit)
 
 void Juego::gameloop()
 {
-	while (1)
+	cargar_recursos();//esto debería llamarse en el constructor
+	while (wnd->isOpen())
 	{
-		cargar_recursos();
+		anim->Update();
 		procesar_eventos();
 		dibujar();
 	}
@@ -23,68 +24,67 @@ void Juego::gameloop()
 
 void Juego::procesar_eventos()
 {
-	while (wnd->pollEvent(*evento))
-	{
-		Event e;
-		while(wnd->pollEvent(e)) {
-			if(e.type == Event::Closed)
-				wnd->close();	
-			if (Keyboard::isKeyPressed(Keyboard::A)) {
-				anim->Play("run");
-				anim->FlipX(true);
-				anim->move(-2, 0);
-			}
-			if (Keyboard::isKeyPressed(Keyboard::D)) {
-				anim->Play("run");
-				anim->FlipX(false);
-				anim->setPosition(anim->getPosition().x + 2, anim->getPosition().y);
-			}
-			if (Keyboard::isKeyPressed(Keyboard::W)) {
-				anim->Play("stairs");
-				anim->FlipY(true);
-				anim->setPosition(anim->getPosition().x, anim->getPosition().y - 1);
-			}
-			if (Keyboard::isKeyPressed(Keyboard::S)) {
-				anim->Play("falls of");
-				anim->FlipY(false);
-				anim->setPosition(anim->getPosition().x, anim->getPosition().y + 4);
-			}
-			if (Keyboard::isKeyPressed(Keyboard::I)) {
-				anim->Play("idle");
-			}
-			if (Keyboard::isKeyPressed(Keyboard::Z)) {
-				anim->setScale(anim->getScale().x + 1.f, anim->getScale().x + 1.f);
-			}
-			if (Keyboard::isKeyPressed(Keyboard::X)) {
-				anim->setScale(anim->getScale().x - 1.f, anim->getScale().x - 1.f);
-			}
-			if (Keyboard::isKeyPressed(Keyboard::R)) {
-				anim->setRotation(anim->getRotation() + 1.f);
-			}
-			if (Keyboard::isKeyPressed(Keyboard::Q)) {
-			anim->setRotation(anim->getRotation() - 1.f);
-			}
+	//había doble pollEvent (es una cola de eventos de ventana, no se requiere hacer doble control de la cola)
+		while(wnd->pollEvent(*evento)) 
+		{
+			if(evento->type == Event::Closed)
+				wnd->close();
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+			anim->FlipX(false);
+			anim->setPosition(anim->getPosition().x - 1, anim->getPosition().y);
+			if (!saltoEnProceso)
+				anim->Play("walking");
+			else
+				anim->Play("jump");
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+			anim->FlipX(true);
+			anim->setPosition(anim->getPosition().x + 1, anim->getPosition().y);
+			if (!saltoEnProceso)
+				anim->Play("walking");
+			else
+				anim->Play("jump");
+		}
+		else if (saltoEnProceso) {
+			anim->Play("jump");
+		}
+		else {
+			anim->Play("idle");
 		}		
-	}
 }
 
 void Juego::cargar_recursos()
 {
-	anim = new Afichmation ("spritesheet.png", true, 26, 30); 
-	//Afichmation anim("spritesheet.png", true, 26, 30);
-	anim->Add("idle", {0, 1, 2, 1, 0}, 8, false);
-	anim->Add("run", {3, 4, 5, 4}, 8, true);
-	anim->Add("falls of", {6}, 8, true);
-	anim->Add("stairs", {7, 8}, 8, true);
+	//cargo textura del fondo
+	text_background = new Texture;
+	text_background->loadFromFile("mundo_fondo.jpg");
+	spr_background = new Sprite();
+	spr_background->setTexture(*text_background);
+	//cargo textureas del bloque
+	text_bloque = new Texture;
+	text_bloque->loadFromFile("bloque_pared.png");
+	spr_bloque = new Sprite();
+	spr_bloque->setTexture(*text_bloque);
+	spr_bloque->setPosition(300,210);
+	
+	anim = new Afichmation ("spritesheet.png", true, 208, 249); 	
+	anim->Add("idle", {0, 1, 2, 1, 0}, 8, true);
+	anim->Add("walking", { 3, 4, 5, 6, 7, 8, 9, 10, 11, 10, 9, 8, 7, 6, 5, 4 }, 12, true);
+	anim->Add("run", {3, 4, 5, 4}, 8, true);	
+	anim->Add("jump", { 12, 13, 14 }, 8, false);
+	anim->Add("collide", { 15 }, 8, false);	
 	anim->Play("idle");	
-	anim->setScale(Vector2f(2.f, 2.f));	
+	anim->setScale(Vector2f(.5f, .5f));	
+	anim->setPosition(50,460);
 }
 
 void Juego::dibujar()
 {
-	anim->Update();
 	wnd->clear(Color(255,255,255,255));	
-	anim->Draw(wnd);
+	wnd->draw(*spr_background);
+	wnd->draw(*spr_bloque);
+	wnd->draw(*anim);	
 	wnd->display();
 }
 

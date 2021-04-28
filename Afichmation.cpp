@@ -109,8 +109,14 @@ void Afichmation::Update() {
 			clock.restart();
 		}
 	}
+	
 }
 void Afichmation::Draw(RenderWindow *wnd)
 {
-	wnd->draw(*texture);
+	//wnd->draw(*texture);//dibuja la textura... no el frame
 }
+
+
+
+
+	

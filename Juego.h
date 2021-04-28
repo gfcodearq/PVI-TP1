@@ -21,6 +21,14 @@ private:
 	RenderWindow* wnd;
 	Event* evento;
 	Afichmation* anim;	
+	Texture *text_background;
+	Sprite *spr_background;
+	Texture *text_bloque;
+	Sprite *spr_bloque;
+	bool teclaSaltoPresionada = false;
+	bool enAscenso = false;
+	bool saltoEnProceso = true;
+	bool sentidoDerecha = false;
 };
 
 #endif
