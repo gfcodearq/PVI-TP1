@@ -22,9 +22,6 @@ anim.Play("idle");
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "Animation.h"
-//Declaracion de constante
-const int POSICION_TERRENO_Y = 500;
-const int MAX_ASCENSO_SALTO_Y = 200;
 
 using namespace std;
 using namespace sf;
@@ -99,11 +96,6 @@ private:
 	* @brief Configuraciones comunes en el constructor
 	*/
 	void Setup();
-	
-	bool teclaSaltoPresionada = false;
-	bool enAscenso = false;
-	bool saltoEnProceso = true;
-	bool sentidoDerecha = false;
 	
 	
 public:
@@ -206,12 +198,7 @@ public:
 	* @param Retorna la escala del sprite en formato Vector2f
 	*/
 	const Vector2f &getScale();
-	
-	void ControlarDesplazamiento();
-	void ControlarSalto(Event *event);
-	
-	void Draw(RenderWindow *wnd); //dibuja la animacion en pantalla
-
+	void Draw(RenderWindow *wnd);	
 };
 #endif
 
